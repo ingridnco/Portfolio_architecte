@@ -55,10 +55,11 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	margin: 50px 0;
 }
 section {
 	margin: 50px 0
@@ -157,8 +158,32 @@ li:hover, a:hover{
 	background-color: #1D6154;
 	color:white;
 }
+
+.edit{
+	position: absolute;
+    top: 0px;
+	left:0px;
+	width:100%;
+	color:white;
+	background-color: black;
+	height:50px;
+	text-align:center;
+	line-height:40px;
+	
+}
+
+.modifier{
+	position: relative;
+    top: -47px;
+    left: 700px;
+	width: 80px;
+}
+
 .hidden{
 	display:none;
+}
+.fa-pen-to-square{
+	color: black
 }
 
 /***************************************************************/
