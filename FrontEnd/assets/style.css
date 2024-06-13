@@ -105,6 +105,11 @@ nav a{
 li:hover, a:hover{
 	color: #B1663C;
 }
+
+.logout{
+	cursor:pointer;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -131,6 +136,7 @@ li:hover, a:hover{
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
+	margin-top: 4em;
 }
 /*****************************************************************/
 .filtersContainer{
@@ -140,13 +146,14 @@ li:hover, a:hover{
 	justify-content: space-between;
 	margin-bottom: 30px;
 }
-.filtersContainer div{
+.filtersContainer div, .btnAddPhoto{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: #1D6154;
 	border:1px solid;
 	border-radius: 20px;
 	padding:10px 20px;
+	cursor:pointer;
 }
 
 .filtersContainer .btnActive{
@@ -172,11 +179,12 @@ li:hover, a:hover{
 	
 }
 
-.modifier{
+.btnModifier{
 	position: relative;
     top: -47px;
     left: 700px;
 	width: 80px;
+	cursor: pointer;
 }
 
 .hidden{
@@ -196,8 +204,21 @@ li:hover, a:hover{
 	grid-row-gap: 20px;
 }
 
-.gallery img {
+
+
+.galleryModale{
+	width: 68%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: 109px;
+    grid-column-gap: 10px;
+    grid-row-gap: 30px;
+    margin: 60px auto;
+}
+
+.gallery img, .galleryModale img {
 	width: 100%;
+	object-fit: cover;
 
 }
 
@@ -249,7 +270,7 @@ margin: auto;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -259,6 +280,91 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
+/************************************************/
+
+#modale{
+	position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    overflow: auto;
+}
+.modaleContainer{
+	position:relative;
+    background-color: white;
+    border-radius: 15px;
+    width: 43vw;
+    height: fit-content;
+    text-align: center;
+    margin-top: 1170px;
+    margin-bottom: 20px;
+
+}
+
+.modaleContainer h1{
+	position:relative;
+	font-size:26px;
+	color :black;
+	font-family: Work Sans;
+	font-weight: 400;
+	margin-top:40px;
+}
+
+.btnAddPhoto{
+	background-color: #1D6154;
+	color:white;
+	margin-bottom: 40px;
+}
+
+.galleryModale figure{
+	position:relative;
+}
+
+.trashIcon{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 25px;
+    position: absolute;
+    right: 0px;
+}
+.trashIcon .fa-sm{
+    font-size: .800em;
+    line-height: 0.9em;
+}
+
+.fa-trash-can{
+	position: absolute;
+	top :5px;
+	right:5px;
+	width:10px;
+	height:10px;
+	color: #ffffff;
+	padding:3px;
+	background-color: black;
+}
+
+.fa-xmark{
+	position:absolute;
+	top:30px;
+	right:30px;
+	cursor: pointer;
+}
+
+.greyLine{
+	margin:40px auto;
+	width:420px;
+	height:1px;
+	background-color: #B3B3B3;
+}
+
+/************************************************/
 
 footer{
 margin-top:100px;
