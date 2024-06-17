@@ -1,25 +1,33 @@
+let gallery=[]
+
 /*****************appel API Works**************************/
 async function apiRequestWorks() {
-    try {    
         const url = "http://localhost:5678/api/works/"
         const response = await fetch(url)
-        const gallery = await response.json()
+        gallery = await response.json()
+        return gallery
+}
 
+async function createGallery() {
+    await apiRequestWorks()
+    try{    
         let divGallery = document.querySelector("#portfolio .gallery")
-        let galleryPictures = ""
-        gallery.forEach(item => 
-            galleryPictures += `<figure id = "${item.id}" class = "cat${item.categoryId} cat0">
+        divGallery.innerHTML = ""
+
+        let galleryPictures=""
+        gallery.forEach(item => {
+          galleryPictures += `<figure id = "${item.id}" class = "cat${item.categoryId} cat0">
                 <img src = "${item.imageUrl}">
                 <figcaption>${item.title}</figcaption>
-                </figure>`
-        )
-
-        divGallery.innerHTML = galleryPictures   
+                </figure>`     
+        })
+        divGallery.innerHTML = galleryPictures 
     } catch (error) {
         console.log("Erreur dans la création de la gallery : ", error.message)
     }
 }
-apiRequestWorks()
+
+
 
 /********************appel API Categories**********************/
 async function apiRequestCategories() {
@@ -31,7 +39,7 @@ async function apiRequestCategories() {
     } catch (error) {
         console.log("Erreur dans l'appel à l'API : ", error.message)    
     }  
-
+    
     try{
         let filtersContainer = document.createElement("div")
         let divGallery = document.querySelector(".gallery")
@@ -60,7 +68,7 @@ async function apiRequestCategories() {
 
 async function filtrerCategories() { 
    await apiRequestCategories()
-    try{
+   try{
     let btnCat = [] 
         for (let i = 0; i < 4; i++) {
             btnCat[i] = document.getElementById("btnCat" + i)
@@ -82,7 +90,7 @@ async function filtrerCategories() {
     }  
 }
 
- async function tokenLocalStorage(){
+async function tokenLocalStorage(){
      await filtrerCategories()
     let tokenStorage = window.localStorage.getItem("token")
     let logout
@@ -119,64 +127,97 @@ async function filtrerCategories() {
     try {
         logout.addEventListener("click", () => {
             window.localStorage.removeItem("token")
-            window.location.reload()
             let header=document.querySelector("header")
             header.style.marginTop ="50px"
+            location.reload()
         })
     } catch (error) {
         console.log("Déconnecté")
     }
+    
 }
 tokenLocalStorage()
 
 
-async function apiRequestModale() {
-    try {        
-    const url = "http://localhost:5678/api/works/"
-    const response = await fetch(url)
-    const gallery = await response.json()
-
-    let divGallery = document.querySelector(".galleryModale")
-    let galleryPictures = ""
-    gallery.forEach(item => 
-        galleryPictures += `<figure id = "${item.id}" class = "cat${item.categoryId} cat0"><div class="trashIcon"><i class="fa-solid fa-sm fa-trash-can"></i></div>
-            <img src = "${item.imageUrl}">
-            </figure>`
-    )
-
-    divGallery.innerHTML = galleryPictures   
-    
+async function createModale(){
+    await createGallery()
+    try{
+        let divGalleryModale = document.querySelector(".galleryModale")
+        divGalleryModale.innerHTML = ""
+        
+        let modaleGallery = ""
+        gallery.forEach(item => {
+            modaleGallery += `<figure id="mod-${item.id}" class="cat${item.categoryId} cat0"><div class="trashIcon"><i id = "${item.id}" class="fa-solid fa-sm fa-trash-can"></i></div>
+                    <img src="${item.imageUrl}">
+                    </figure>`
+        })
+        divGalleryModale.innerHTML = modaleGallery
     } catch (error) {
         console.log("Erreur dans la création de la modale : ", error.message)
     }
 }
-apiRequestModale()
 
+async function gererModale(){
+    await createModale()
+    try{
+        let modale=document.getElementById("modale")
 
-try{
-    let modale=document.getElementById("modale")
+        let btnModifier=document.querySelector(".btnModifier")
+        btnModifier.addEventListener("click",() => modale.style.display="flex")
 
-    function afficherModale(){
-        modale.style.display="flex"
-    }
-
-    function fermerModale(){
-        modale.style.display="none"
-    }
-
-    let btnModifier=document.querySelector(".btnModifier")
-    btnModifier.addEventListener("click",afficherModale)
-
-    let faXmark=document.querySelector(".fa-xmark")
-    faXmark.addEventListener("click",fermerModale)
-
-    modale.addEventListener("click", (event)=> {
-        if (event.target.id==="modale") {
-            fermerModale()  
+        function fermerModale(){
+            modale.style.display="none"
         }
-    })
-} catch (error) {
-    console.log("Erreur dans la gestion de la modale : ", error.message)
+
+        let faXmark=document.querySelector(".fa-xmark")
+        faXmark.addEventListener("click",fermerModale)
+
+        modale.addEventListener("click", (event)=> {
+            if (event.target.id==="modale") {
+                fermerModale()  
+            }
+        })
+    } catch (error) {
+        console.log("Erreur dans la gestion de la modale : ", error.message)
+    }
 }
+   
+async function deleteItem(){
+    await gererModale() 
+    const btnSuppr = document.querySelectorAll(".trashIcon i")
+    btnSuppr.forEach(btn=>{
+        btn.addEventListener("click", deleteBtn)
+    })
+}      
+deleteItem()
+
+async function deleteBtn(event){
+    const btn = event.currentTarget
+    try{   
+        let tokenStorage = window.localStorage.getItem("token") 
+        let url = `http://localhost:5678/api/works/${btn.id}`
+        const response =  await fetch(url, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${tokenStorage}`, 
+                "Accept": "*/*" 
+                }
+        })
+
+        if(response.ok){
+            gallery=gallery.filter(item=>item.id !== Number(btn.id))
+            createGallery()
+            createModale()
+            deleteItem()
+        }
+
+        if (event.currentTarget !== btn.id)
+            throw new Error("l'API ne reconnaît pas ce fichier.")
+        } catch (error) {
+            console.log("Impossible d'effacer :", error.message)
+        } 
+        
+    }
 
 
+
+//let filtered = gallery.filter(function(fig) { return fig.id != 1 })

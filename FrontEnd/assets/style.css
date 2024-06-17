@@ -210,7 +210,6 @@ li:hover, a:hover{
 	width: 68%;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-	grid-template-rows: 109px;
     grid-column-gap: 10px;
     grid-row-gap: 30px;
     margin: 60px auto;
@@ -334,6 +333,7 @@ input[type="submit"] {
     position: absolute;
     right: 0px;
 }
+
 .trashIcon .fa-sm{
     font-size: .800em;
     line-height: 0.9em;
