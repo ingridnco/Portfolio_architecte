@@ -1,11 +1,15 @@
 let gallery=[]
-
+let categories=[]
 /*****************appel API Works**************************/
 async function apiRequestWorks() {
+    try{
         const url = "http://localhost:5678/api/works/"
         const response = await fetch(url)
         gallery = await response.json()
         return gallery
+    } catch (error) {
+        console.log("Erreur dans l'appel à l'API : ", error.message)    
+    }  
 }
 
 async function createGallery() {
@@ -16,7 +20,8 @@ async function createGallery() {
 
         let galleryPictures=""
         gallery.forEach(item => {
-          galleryPictures += `<figure id = "${item.id}" class = "cat${item.categoryId} cat0">
+          galleryPictures += 
+                `<figure id = "${item.id}" class = "cat${item.categoryId} cat0">
                 <img src = "${item.imageUrl}">
                 <figcaption>${item.title}</figcaption>
                 </figure>`     
@@ -28,10 +33,8 @@ async function createGallery() {
 }
 
 
-
 /********************appel API Categories**********************/
 async function apiRequestCategories() {
-    let categories
     try {
         const url = "http://localhost:5678/api/categories/"
         const response = await fetch(url)
@@ -39,7 +42,10 @@ async function apiRequestCategories() {
     } catch (error) {
         console.log("Erreur dans l'appel à l'API : ", error.message)    
     }  
-    
+}
+
+async function createCategories(){
+    await apiRequestCategories()
     try{
         let filtersContainer = document.createElement("div")
         let divGallery = document.querySelector(".gallery")
@@ -54,10 +60,11 @@ async function apiRequestCategories() {
 
         //création des boutons filtres
         const catArray = [...catSet] //copie vraie du tableau
-        let filtersBtn=`
-            <div id="btnCat0" class="btnActive">Tous</div>`
+        let filtersBtn=
+            `<div id="btnCat0" class="btnActive">Tous</div>`
         for (let i = 0; i < catArray.length; i++) {
-            filtersBtn += `<div id="btnCat${[i + 1]}">${catArray[i]}</div>`
+            filtersBtn += 
+            `<div id="btnCat${[i + 1]}">${catArray[i]}</div>`
         }
         filtersContainer.innerHTML = filtersBtn
             
@@ -65,25 +72,23 @@ async function apiRequestCategories() {
         console.log("Erreur dans la création des boutons filtres : ", error.message)    
     }   
 }
+       
 
-async function filtrerCategories() { 
-   await apiRequestCategories()
-   try{
-    let btnCat = [] 
+async function filterCategories() {
+    await createCategories()
+    try{
+        let btnCat = [] 
         for (let i = 0; i < 4; i++) {
             btnCat[i] = document.getElementById("btnCat" + i)
-
-            function filterCategories(event) {
+            btnCat[i].addEventListener("click", (event)=>{
                 let figures = Array.from(document.querySelectorAll(".gallery figure"))
+                figures.forEach(fig => fig.style.display ="none") //masque tous les travaux
                 let filterFigures = figures.filter(fig => fig.classList.contains("cat" + i))
-                
-                figures.forEach(fig => fig.style.display ="none")   //efface tous les travaux
                 filterFigures.forEach(fig => fig.style.display ="block")   //affiche les travaux filtrés
-            
+
                 btnCat.forEach(btn => btn.classList.remove("btnActive"))
                 event.currentTarget.classList.add("btnActive")
-            }
-            btnCat[i].addEventListener("click", filterCategories)
+            })
         }
     } catch (error) {
         console.log("Erreur dans l'action des boutons filtres : ", error.message)    
@@ -91,7 +96,7 @@ async function filtrerCategories() {
 }
 
 async function tokenLocalStorage(){
-     await filtrerCategories()
+    await filterCategories()
     let tokenStorage = window.localStorage.getItem("token")
     let logout
 
@@ -101,21 +106,18 @@ async function tokenLocalStorage(){
 
         let header=document.querySelector("header")
         header.style.marginTop ="100px"
-
-        logout = document.querySelector(".logout")
+        //afficher les éléments admin:
+        logout = document.querySelector(".logout") //bouton logout
         logout.classList.remove("hidden")
-
-        const login = document.querySelector(".login")
-        login.classList.add("hidden")
-
-        const blackBanner = document.querySelector(".edit")
+        const blackBanner = document.querySelector(".edit")//bandeau noir au-dessus du header
         blackBanner.classList.remove("hidden")
-
-        const modifProjet = document.querySelector(".btnModifier")
+        const modifProjet = document.querySelector(".btnModifier")//bouton modifier
         modifProjet.classList.remove("hidden")
-
-        const filtersBar = document.querySelector(".filtersContainer")
+        //masquer les éléments :
+        const filtersBar = document.querySelector(".filtersContainer")//boutons filtres
         filtersBar.classList.add("hidden")
+        const login = document.querySelector(".login")//bouton login
+        login.classList.add("hidden")
 
     } else {
         throw new Error("token non sauvegardé")
@@ -123,7 +125,7 @@ async function tokenLocalStorage(){
     } catch (error) {
         console.log("Gestion du token : ", error.message)    
     }  
-
+    //gestion du logout:
     try {
         logout.addEventListener("click", () => {
             window.localStorage.removeItem("token")
@@ -147,7 +149,8 @@ async function createModale(){
         
         let modaleGallery = ""
         gallery.forEach(item => {
-            modaleGallery += `<figure id="mod-${item.id}" class="cat${item.categoryId} cat0"><div class="trashIcon"><i id = "${item.id}" class="fa-solid fa-sm fa-trash-can"></i></div>
+            modaleGallery += 
+                    `<figure id="mod-${item.id}" class="cat${item.categoryId} cat0"><div class="trashIcon"><i id = "${item.id}" class="fa-solid fa-sm fa-trash-can"></i></div>
                     <img src="${item.imageUrl}">
                     </figure>`
         })
@@ -181,7 +184,7 @@ async function gererModale(){
         console.log("Erreur dans la gestion de la modale : ", error.message)
     }
 }
-   
+
 async function deleteItem(){
     await gererModale() 
     const btnSuppr = document.querySelectorAll(".trashIcon i")
@@ -192,6 +195,7 @@ async function deleteItem(){
 deleteItem()
 
 async function deleteBtn(event){
+    
     const btn = event.currentTarget
     try{   
         let tokenStorage = window.localStorage.getItem("token") 
@@ -208,16 +212,11 @@ async function deleteBtn(event){
             createGallery()
             createModale()
             deleteItem()
-        }
-
-        if (event.currentTarget !== btn.id)
+        }else{
             throw new Error("l'API ne reconnaît pas ce fichier.")
-        } catch (error) {
-            console.log("Impossible d'effacer :", error.message)
-        } 
+        }
+    } catch (error) {
+        console.log("Impossible d'effacer :", error.message)
+    } 
         
-    }
-
-
-
-//let filtered = gallery.filter(function(fig) { return fig.id != 1 })
+}
