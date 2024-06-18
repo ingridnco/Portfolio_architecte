@@ -1,11 +1,9 @@
-let gallery=[]
-let categories=[]
 /*****************appel API Works**************************/
 async function apiRequestWorks() {
     try{
         const url = "http://localhost:5678/api/works/"
         const response = await fetch(url)
-        gallery = await response.json()
+        const gallery = await response.json()
         return gallery
     } catch (error) {
         console.log("Erreur dans l'appel à l'API : ", error.message)    
@@ -13,7 +11,7 @@ async function apiRequestWorks() {
 }
 
 async function createGallery() {
-    await apiRequestWorks()
+    const gallery = await apiRequestWorks()
     try{    
         let divGallery = document.querySelector("#portfolio .gallery")
         divGallery.innerHTML = ""
@@ -27,6 +25,7 @@ async function createGallery() {
                 </figure>`     
         })
         divGallery.innerHTML = galleryPictures 
+        return gallery
     } catch (error) {
         console.log("Erreur dans la création de la gallery : ", error.message)
     }
@@ -38,14 +37,15 @@ async function apiRequestCategories() {
     try {
         const url = "http://localhost:5678/api/categories/"
         const response = await fetch(url)
-        categories = await response.json()
+        const categories = await response.json()
+        return categories
     } catch (error) {
         console.log("Erreur dans l'appel à l'API : ", error.message)    
     }  
 }
 
 async function createCategories(){
-    await apiRequestCategories()
+    const categories = await apiRequestCategories()
     try{
         let filtersContainer = document.createElement("div")
         let divGallery = document.querySelector(".gallery")
@@ -142,7 +142,7 @@ tokenLocalStorage()
 
 
 async function createModale(){
-    await createGallery()
+    const gallery= await createGallery()
     try{
         let divGalleryModale = document.querySelector(".galleryModale")
         divGalleryModale.innerHTML = ""
@@ -195,8 +195,8 @@ async function deleteItem(){
 deleteItem()
 
 async function deleteBtn(event){
-    
     const btn = event.currentTarget
+    let gallery = await createGallery()
     try{   
         let tokenStorage = window.localStorage.getItem("token") 
         let url = `http://localhost:5678/api/works/${btn.id}`
@@ -209,9 +209,9 @@ async function deleteBtn(event){
 
         if(response.ok){
             gallery=gallery.filter(item=>item.id !== Number(btn.id))
-            createGallery()
-            createModale()
-            deleteItem()
+            await createGallery()
+            await createModale()
+            await deleteItem()
         }else{
             throw new Error("l'API ne reconnaît pas ce fichier.")
         }
