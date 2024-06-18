@@ -31,7 +31,6 @@ async function createGallery() {
     }
 }
 
-
 /********************appel API Categories**********************/
 async function apiRequestCategories() {
     try {
