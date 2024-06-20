@@ -146,7 +146,7 @@ li:hover, a:hover{
 	justify-content: space-between;
 	margin-bottom: 30px;
 }
-.filtersContainer div, .btnAddPhoto{
+.filtersContainer div, .btnAddPhoto, #modaleContainer [type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: #1D6154;
@@ -155,7 +155,11 @@ li:hover, a:hover{
 	padding:10px 20px;
 	cursor:pointer;
 }
-
+.btnAddPhoto, #modaleContainer [type="submit"]{
+	width:172px;
+	height:39px;
+	border:none;
+}
 .filtersContainer .btnActive{
 	background-color: #1D6154;
 	color:white;
@@ -204,52 +208,64 @@ li:hover, a:hover{
 	grid-row-gap: 20px;
 }
 
-
-
 .galleryModale{
 	width: 68%;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 30px;
-    margin: 60px auto;
+	margin: 50px auto;
+    overflow: auto;
+    
 }
 
 .gallery img, .galleryModale img {
 	width: 100%;
 	object-fit: cover;
-
+	height: 96%;
 }
 
+.addPhotoModale{
+	width: 68%;
+	margin: 60px auto;
+}
+#modaleContainer .addPhotoSpace [type="file"]{
+	display:none;
+}
+
+#modaleContainer .photoBtn{
+	margin: 0;
+}
 /**********************************************************/
-#contact, #login {
+#contact, #login, #modaleContainer {
 	width: 50%;
 margin: auto;
 }
-#contact > *, #login > *{
+#contact > *, #login > *,#modaleContainer > *{
 	text-align: center;
 
 }
-#contact h2, #login h2{
+#contact h2, #login h2, #modaleContainer h2{
 	margin-bottom: 20px;
 }
-#contact form , #login form{
+#contact form , #login form, #modaleContainer form{
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input , #login input{
+#contact input , #login input, #modaleContainer input, #modaleContainer select{
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+
 #login input[type="submit"]{
 	height:40px;
-	margin-top:30px;;
+	margin-top:30px;
 }
 #login a{
 	color:black;
@@ -259,7 +275,7 @@ margin: auto;
 	color:#B1663C;
 }
 
-#contact label , #login label{
+#contact label , #login label, #modaleContainer label{
 	margin: 2em 0 1em 0;
 }
 /********************************************************/
@@ -281,7 +297,7 @@ input[type="submit"] {
 }
 /************************************************/
 
-#modale{
+#modaleContainer{
 	position: fixed;
     top: 0;
     left: 0;
@@ -293,19 +309,16 @@ input[type="submit"] {
     background-color: rgba(0, 0, 0, 0.3);
     overflow: auto;
 }
-.modaleContainer{
+.modaleDeleteWorks, .modaleAddWorks{
 	position:relative;
     background-color: white;
     border-radius: 15px;
     width: 43vw;
-    height: fit-content;
+    height: 660px;
     text-align: center;
-    margin-top: 1170px;
-    margin-bottom: 20px;
-
 }
 
-.modaleContainer h1{
+.modaleDeleteWorks h1, .modaleAddWorks h1{
 	position:relative;
 	font-size:26px;
 	color :black;
@@ -356,14 +369,72 @@ input[type="submit"] {
 	right:30px;
 	cursor: pointer;
 }
-
-.greyLine{
+.galleryLowPart{
+	position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+.greyLine, .greyLineAddPhoto{
 	margin:40px auto;
-	width:420px;
+	width:68%;
 	height:1px;
 	background-color: #B3B3B3;
 }
+.greyLineAddPhoto{
+	margin:40px auto;
+	height:1px;
+}
 
+#modaleContainer [type="submit"] {
+	background-color: #A7A7A7;
+	color:white;
+	line-height:1em;
+	margin: 0 0 40px 0;
+}
+
+#modaleContainer .modaleAddWorks [type="text"], #modaleContainer .modaleAddWorks select {
+	font-family: 'Work Sans';
+	font-size: 14px;
+	color:#444444;
+}
+
+.addPhotoSpace{
+	display: flex;
+	flex-direction: column;
+	justify-content:center;
+	align-items:center;
+	gap:7px;
+	background-color: #E8F1F6;
+	width:100%;
+	margin:auto;
+	height:170px;
+ }
+
+.addPhotoSpace div {
+font-size: 10px;
+text-align: center;
+}
+
+.addPhotoSpace .photoBtn{
+	font-size: 14px;
+	padding:10px 35px;
+	background-color: #CBD6DC;
+	border-radius: 15px;
+	width:fit-content;
+	color:#306685;
+	font-weight:600;
+
+}
+
+.fa-image{
+	color:#B9C5CC;
+	width:200px;
+}
+.addPhotoSpace .fa-2xl{
+	font-size: 7.5em;
+	line-height: 1em;
+}
 /************************************************/
 
 footer{

@@ -3,29 +3,27 @@ async function apiRequestWorks() {
     try{
         const url = "http://localhost:5678/api/works/"
         const response = await fetch(url)
-        const gallery = await response.json()
+        let gallery = await response.json()
         return gallery
     } catch (error) {
         console.log("Erreur dans l'appel à l'API : ", error.message)    
     }  
 }
 
-async function createGallery() {
-    const gallery = await apiRequestWorks()
+function createGallery(gallery) {
     try{    
         let divGallery = document.querySelector("#portfolio .gallery")
         divGallery.innerHTML = ""
 
         let galleryPictures=""
-        gallery.forEach(item => {
-          galleryPictures += 
+        gallery.forEach(item => {          
+            galleryPictures += 
                 `<figure id = "${item.id}" class = "cat${item.categoryId} cat0">
                 <img src = "${item.imageUrl}">
                 <figcaption>${item.title}</figcaption>
                 </figure>`     
         })
         divGallery.innerHTML = galleryPictures 
-        return gallery
     } catch (error) {
         console.log("Erreur dans la création de la gallery : ", error.message)
     }
@@ -36,15 +34,14 @@ async function apiRequestCategories() {
     try {
         const url = "http://localhost:5678/api/categories/"
         const response = await fetch(url)
-        const categories = await response.json()
+        let categories = await response.json()
         return categories
     } catch (error) {
         console.log("Erreur dans l'appel à l'API : ", error.message)    
     }  
 }
 
-async function createCategories(){
-    const categories = await apiRequestCategories()
+function createCategories(categories){
     try{
         let filtersContainer = document.createElement("div")
         let divGallery = document.querySelector(".gallery")
@@ -58,28 +55,26 @@ async function createCategories(){
         }
 
         //création des boutons filtres
-        const catArray = [...catSet] //copie vraie du tableau
+        categories = [...catSet] //copie vraie du tableau
         let filtersBtn=
             `<div id="btnCat0" class="btnActive">Tous</div>`
-        for (let i = 0; i < catArray.length; i++) {
+        for (let i = 0; i < categories.length; i++) {
             filtersBtn += 
-            `<div id="btnCat${[i + 1]}">${catArray[i]}</div>`
+            `<div id="btnCat${[i + 1]}">${categories[i]}</div>`
         }
         filtersContainer.innerHTML = filtersBtn
-            
+         
     } catch (error) {
         console.log("Erreur dans la création des boutons filtres : ", error.message)    
     }   
 }
-       
 
-async function filterCategories() {
-    await createCategories()
+function filterCategories() {
     try{
         let btnCat = [] 
         for (let i = 0; i < 4; i++) {
             btnCat[i] = document.getElementById("btnCat" + i)
-            btnCat[i].addEventListener("click", (event)=>{
+            btnCat[i].addEventListener("click", event => {
                 let figures = Array.from(document.querySelectorAll(".gallery figure"))
                 figures.forEach(fig => fig.style.display ="none") //masque tous les travaux
                 let filterFigures = figures.filter(fig => fig.classList.contains("cat" + i))
@@ -94,33 +89,33 @@ async function filterCategories() {
     }  
 }
 
-async function tokenLocalStorage(){
-    await filterCategories()
+function tokenLocalStorage(){
     let tokenStorage = window.localStorage.getItem("token")
     let logout
 
     try{
         if (tokenStorage !== null) {
-        console.log("storageLocal ok : " + tokenStorage)
+            console.log("storageLocal ok : " + tokenStorage)
+            let header=document.querySelector("header")
+            header.style.marginTop ="100px"
 
-        let header=document.querySelector("header")
-        header.style.marginTop ="100px"
-        //afficher les éléments admin:
-        logout = document.querySelector(".logout") //bouton logout
-        logout.classList.remove("hidden")
-        const blackBanner = document.querySelector(".edit")//bandeau noir au-dessus du header
-        blackBanner.classList.remove("hidden")
-        const modifProjet = document.querySelector(".btnModifier")//bouton modifier
-        modifProjet.classList.remove("hidden")
-        //masquer les éléments :
-        const filtersBar = document.querySelector(".filtersContainer")//boutons filtres
-        filtersBar.classList.add("hidden")
-        const login = document.querySelector(".login")//bouton login
-        login.classList.add("hidden")
+            //afficher les éléments admin:
+            logout = document.querySelector(".logout") //bouton logout
+            logout.classList.remove("hidden")
+            const blackBanner = document.querySelector(".edit")//bandeau noir au-dessus du header
+            blackBanner.classList.remove("hidden")
+            const modifProjet = document.querySelector(".btnModifier")//bouton modifier
+            modifProjet.classList.remove("hidden")
 
-    } else {
-        throw new Error("token non sauvegardé")
-    }
+            //masquer les éléments :
+            const filtersBar = document.querySelector(".filtersContainer")//boutons filtres
+            filtersBar.classList.add("hidden")
+            const login = document.querySelector(".login")//bouton login
+            login.classList.add("hidden")
+
+        } else {
+            throw new Error("token non sauvegardé")
+        }
     } catch (error) {
         console.log("Gestion du token : ", error.message)    
     }  
@@ -137,11 +132,8 @@ async function tokenLocalStorage(){
     }
     
 }
-tokenLocalStorage()
 
-
-async function createModale(){
-    const gallery= await createGallery()
+function createModale(gallery){
     try{
         let divGalleryModale = document.querySelector(".galleryModale")
         divGalleryModale.innerHTML = ""
@@ -159,63 +151,91 @@ async function createModale(){
     }
 }
 
-async function gererModale(){
-    await createModale()
-    try{
-        let modale=document.getElementById("modale")
+function gererModale(){
 
+    try{//afficher la modale en cliquant sur modifier
+        let modale=document.getElementById("modaleContainer")
         let btnModifier=document.querySelector(".btnModifier")
-        btnModifier.addEventListener("click",() => modale.style.display="flex")
+        btnModifier.addEventListener("click",() =>{ 
+            modale.style.display="flex"
+            //toujours afficher la page suppression de la modale en premier
+            let modaleDeleteWorks=document.querySelector(".modaleDeleteWorks")
+            modaleDeleteWorks.classList.remove("hidden")
+            let modaleAddWorks=document.querySelector(".modaleAddWorks")
+            modaleAddWorks.classList.add("hidden")      
+        })
 
         function fermerModale(){
             modale.style.display="none"
         }
-
-        let faXmark=document.querySelector(".fa-xmark")
-        faXmark.addEventListener("click",fermerModale)
-
-        modale.addEventListener("click", (event)=> {
-            if (event.target.id==="modale") {
+        //fermer en cliquant sur la croix
+        document.querySelectorAll(".fa-xmark")
+                .forEach(mark=>mark.addEventListener("click",fermerModale))
+        //fermer en cliquant en dehors de la modale
+        modale.addEventListener("click", event => {
+            if (event.target.id==="modaleContainer") {
                 fermerModale()  
-            }
+            }   
         })
+        let btnAddPhoto=document.querySelector(".btnAddPhoto")
+        let modaleDeleteWorks=document.querySelector(".modaleDeleteWorks")
+        let modaleAddWorks=document.querySelector(".modaleAddWorks")
+        btnAddPhoto.addEventListener("click",()=>{  
+            modaleDeleteWorks.classList.add("hidden")
+            modaleAddWorks.classList.remove("hidden")
+        })
+
     } catch (error) {
         console.log("Erreur dans la gestion de la modale : ", error.message)
     }
 }
 
-async function deleteItem(){
-    await gererModale() 
-    const btnSuppr = document.querySelectorAll(".trashIcon i")
-    btnSuppr.forEach(btn=>{
-        btn.addEventListener("click", deleteBtn)
-    })
-}      
-deleteItem()
+function setDeleteBtns(gallery){
+    try{  
+        const btnSuppr = document.querySelectorAll(".trashIcon i")
+        btnSuppr.forEach(btn=>{
+            btn.addEventListener("click", async event =>{
+                let button = event.currentTarget
+                let tokenStorage = window.localStorage.getItem("token") 
+            
+                let url = `http://localhost:5678/api/works/${button.id}`
+                const response =  await fetch(url, {
+                    method: "DELETE",
+                    headers: { 
+                        "Authorization": `Bearer ${tokenStorage}`, 
+                        "Accept": "*/*" 
+                    }
+                })
 
-async function deleteBtn(event){
-    const btn = event.currentTarget
-    let gallery = await createGallery()
-    try{   
-        let tokenStorage = window.localStorage.getItem("token") 
-        let url = `http://localhost:5678/api/works/${btn.id}`
-        const response =  await fetch(url, {
-        method: "DELETE",
-        headers: { "Authorization": `Bearer ${tokenStorage}`, 
-                "Accept": "*/*" 
+                if(response.ok){
+                    gallery=gallery.filter(item=>item.id !== Number(button.id))
+                    console.log('gallery:', gallery)
+                    createGallery(gallery)
+                    createModale(gallery)
+                    setDeleteBtns(gallery)
+                    
+                }else{
+                    throw new Error("l'API ne reconnaît pas ce fichier.")
                 }
+            })
         })
-
-        if(response.ok){
-            gallery=gallery.filter(item=>item.id !== Number(btn.id))
-            await createGallery()
-            await createModale()
-            await deleteItem()
-        }else{
-            throw new Error("l'API ne reconnaît pas ce fichier.")
-        }
     } catch (error) {
         console.log("Impossible d'effacer :", error.message)
     } 
-        
+            
 }
+
+async function appels(){
+    let gallery = await apiRequestWorks()
+    createGallery(gallery)
+    let categories = await apiRequestCategories()
+    createCategories(categories)
+    filterCategories() 
+    tokenLocalStorage()
+    createModale(gallery)
+    gererModale()
+    setDeleteBtns(gallery)
+
+}
+    
+appels()

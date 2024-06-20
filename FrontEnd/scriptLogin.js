@@ -17,7 +17,6 @@ function balisesErreurs(balise,message,messageErreur){
         }
 }
 
-
 try {
     formConnect.addEventListener("submit", async (event) => {
         event.preventDefault()
@@ -41,7 +40,7 @@ try {
             window.localStorage.setItem("token", getToken.token)
             location.href = "index.html"
         } else {
-            let messageErreur = "Email et/ou mot de passe incorrect(s)."
+            let messageErreur = "Erreur dans l’identifiant ou le mot de passe."
             if(emailConnect.value ==="" && passwordConnect.value ===""){
                 messageErreur="Les champs sont vides."
             }else if(emailConnect.value ===""){
