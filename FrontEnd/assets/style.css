@@ -401,13 +401,10 @@ input[type="submit"] {
 
 .addPhotoSpace{
 	display: flex;
-	flex-direction: column;
 	justify-content:center;
 	align-items:center;
-	gap:7px;
 	background-color: #E8F1F6;
 	width:100%;
-	margin:auto;
 	height:170px;
  }
 
@@ -434,6 +431,17 @@ text-align: center;
 .addPhotoSpace .fa-2xl{
 	font-size: 7.5em;
 	line-height: 1em;
+}
+
+#image{
+	max-height: 170px; 
+	display: none;
+}
+
+#photoContainer{
+	display: flex;
+    flex-direction: column;
+	align-items: center;
 }
 /************************************************/
 

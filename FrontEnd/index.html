@@ -70,27 +70,25 @@
                 </div>
                 <div class="modaleAddWorks hidden">
                     <h1>Ajout photo</h1>
-                    <form class="addPhotoModale">
-                    <div><i class="fa-solid fa-xmark fa-xl"></i></div>
-                    <div class="addPhotoSpace">
-                        <div><i class="fa-regular fa-image fa-2xl"></i></div>
-                        <label for="photo" class="photoBtn">+ Ajouter photo</label>
-                        <input type="file" accept=".jpg,.png" id="photo">
-                        <div>jpg, png : 4mo max</div>
-                    </div>
-                    
+                    <form id="formulaire" class="addPhotoModale" method="post" url="/upload-picture" enctype="multipart/form-data">
+                        <div><i class="fa-solid fa-xmark fa-xl"></i></div>
+                        <div class="addPhotoSpace">
+                            <img src="#" alt="" id="image">
+                            <div id="photoContainer">
+                                <i class="fa-regular fa-image fa-2xl"></i>
+                                <label for="photo" class="photoBtn">+ Ajouter photo</label>
+                                <input type="file" name="picture" accept=".jpg,.png" id="photo" onchange="previewPicture(this)" required>
+                                <div>jpg, png : 4mo max</div>
+                            </div>
+                        </div>
                         <label for="titre">Titre</label>
-                        <input type="text" name="titre" id="titre">
+                        <input type="text" name="titre" id="titre" required>
                         <label for="category">Catégorie</label>
-                        <select type="text" name="category" id="category">
-                            <option value="0"></option>
-                            <option value="1">Objet</option>
-                            <option value="2">Appartements</option>
-                            <option value="3">Hotels & restaurants</option>
-                        </select>
-                    </form>
-                    <div class="greyLineAddPhoto"></div>
-                    <input type="submit" value="Valider" class="addPhoto"></input>
+                        <select type="text" name="category" id="category" required>
+                        </select>    
+                </form>
+                <div class="greyLineAddPhoto"></div>
+                <input type="submit" form="formulaire" value="Valider" class="addPhoto"></input>
                 </div>
             </aside>
         </main>
