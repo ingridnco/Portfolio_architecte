@@ -1,4 +1,4 @@
-/*****************appel API Works**************************/
+/*****************affichage dynamique des Works**************************/
 async function apiRequestWorks() {
     try {
         const url = "http://localhost:5678/api/works/"
@@ -29,7 +29,7 @@ function createGallery(gallery) {
     }
 }
 
-/********************appel API Categories**********************/
+/********************affichage dynamique des Categories**********************/
 async function apiRequestCategories() {
     try {
         const url = "http://localhost:5678/api/categories/"
@@ -89,6 +89,8 @@ function filterCategories(categories) {
     }
 }
 
+
+/*************************Gestion du token*********************************/
 function tokenLocalStorage() {
     let tokenStorage = window.localStorage.getItem("token")
     let logout
@@ -133,6 +135,7 @@ function tokenLocalStorage() {
 
 }
 
+/*********************************Modale*********************************/
 function createModale(gallery) {
     try {
         const divGalleryModale = document.querySelector(".galleryModale")
@@ -192,6 +195,7 @@ function gererModale() {
     }
 }
 
+/*************************Supprimer un projet*****************************/
 function setDeleteBtns(gallery) {
     try {
         const btnSuppr = document.querySelectorAll(".trashIcon i")
@@ -219,6 +223,7 @@ function setDeleteBtns(gallery) {
                 } else {
                     alert("Votre session a expiré. Vous allez être redirigé.")
                     window.localStorage.removeItem("token")
+                    debugger
                     location.reload()
                 }
             })
@@ -228,6 +233,36 @@ function setDeleteBtns(gallery) {
     }
 }
 
+/*************************Ajouter un projet*****************************/
+//prévisualiser l'image du projet à envoyer:
+const image = document.getElementById("image")
+const photoContainer = document.getElementById("photoContainer")
+const inputFile = document.getElementById("photo")
+function previewPicture(input) {
+   try{ 
+    const [picture] = input.files
+        if (picture.size <= 4 * 1024 * 1024) {
+            const reader = new FileReader()
+            reader.onload = function (event) {
+                image.src = event.target.result
+                image.style.display = "block"
+                photoContainer.style.display = "none"
+            }
+            reader.readAsDataURL(picture)
+        }else {
+            resetForm()
+            alert("La taille du fichier doit être inférieure à 4 Mo.")
+        }
+   }catch(error){
+        console.log("Erreur:", error.message)
+    }
+}
+
+inputFile.addEventListener("change", function(){ 
+    previewPicture(this)
+})
+  
+//réinitialiser le formulaire :
 const submitButton = document.querySelector(".submitButton")
 function resetForm(){
     const form = document.getElementById("formulaire")
@@ -238,33 +273,7 @@ function resetForm(){
     if(erreurChamp){
         erreurChamp.innerHTML = ""}
     submitButton.removeAttribute("id")
-}
-
-const image = document.getElementById("image")
-const photoContainer = document.getElementById("photoContainer")
-const photo = document.getElementById("photo")
-
-function previewPicture(input) {
-   try{ 
-    const [picture] = input.files
-        if (picture) {
-            const reader = new FileReader()
-            reader.onload = function (event) {
-                image.src = event.target.result
-                image.style.display = "block"
-                photoContainer.style.display = "none"
-            }
-            reader.readAsDataURL(picture)
-        }
-   }catch(error){
-        console.log("Erreur:", error.message)
-    }
-}
-photo.addEventListener("change", function(){ 
-    previewPicture(this)
-})
-
-//reset form au clic sur la preview de la photo
+}//reset form en cliquanr sur la preview :
 document.getElementById("image").addEventListener("click", () => resetForm())
 
 //menu select dynamique
@@ -278,9 +287,8 @@ function menuSelect(categories){
     categoryID.innerHTML=categoriesMenu
 }
 
-const inputFile = document.getElementById("photo")
 const inputTitle = document.getElementById("titre")
-
+//Activation du bouton valider sous conditions :
 function validateBtn(){
     const erreurChamp=document.getElementById("erreurChamp")
     const formFilled=inputFile.files.length > 0 && inputTitle.value.trim() !== "" && categoryID.value !== "0"
@@ -291,11 +299,11 @@ function validateBtn(){
         submitButton.removeAttribute("id")
     }  
 }  
-
 inputFile.addEventListener("change", validateBtn)
 inputTitle.addEventListener("input", validateBtn)
 categoryID.addEventListener("change", validateBtn)
 
+//affichage d'un message d'erreur selon la complétion du formulaire :
 function validateForm(event) {
     try{
         const erreurChamp=document.getElementById("erreurChamp")
@@ -326,9 +334,10 @@ function validateForm(event) {
 }    
 submitButton.addEventListener("click", validateForm)
 
+//préparation de l'appel API pour l'ajout :
 async function addNewPhoto(event) {
     event.preventDefault()
-
+    //construction de l'objet FormData :
     const form = event.target
     const formData = new FormData()
 
@@ -344,7 +353,7 @@ async function addNewPhoto(event) {
     console.log('categoryId:', categoryId)
     formData.append("category", categoryId)
 
-    
+    //Appel API
     try {
         const tokenStorage = window.localStorage.getItem("token")
         const response = await fetch("http://localhost:5678/api/works", {
@@ -377,6 +386,7 @@ async function addNewPhoto(event) {
         console.error("Erreur:", error.message)
     }
 }
+//Clic sur le bouton valider :
 document.querySelector(".addPhotoForm").addEventListener("submit", addNewPhoto)
 
 let gallery = []
