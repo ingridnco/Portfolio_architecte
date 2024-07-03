@@ -21,7 +21,7 @@ function createGallery(gallery) {
                 `<figure id="${item.id}" class="cat${item.categoryId} cat0">
                 <img src="${item.imageUrl}">
                 <figcaption>${item.title}</figcaption>
-            </figure>`
+                </figure>`
         })
         divGallery.innerHTML = galleryPictures
     } catch (error) {
@@ -43,8 +43,8 @@ async function apiRequestCategories() {
 
 function createCategories(categories) {
     try {
-        let filtersContainer = document.createElement("div")
-        let divGallery = document.querySelector(".gallery")
+        const filtersContainer = document.createElement("div")
+        const divGallery = document.querySelector(".gallery")
         divGallery.parentNode.insertBefore(filtersContainer, divGallery)
         filtersContainer.classList.add("filtersContainer")
 
@@ -60,7 +60,7 @@ function createCategories(categories) {
             `<div id="btnCat0" class="btnActive">Tous</div>`
         for (let i = 0; i < categories.length; i++) {
             filtersBtn +=
-                `<div id="btnCat${[i + 1]}">${categories[i]}</div>`
+            `<div id="btnCat${[i + 1]}">${categories[i]}</div>`
         }
         filtersContainer.innerHTML = filtersBtn
 
@@ -69,19 +69,19 @@ function createCategories(categories) {
     }
 }
 
-function filterCategories() {
+function filterCategories(categories) {
     try {
-        let btnCat = []
-        for (let i = 0; i < 4; i++) {
+        const btnCat = []
+        for (let i = 0; i < categories.length + 1; i++) {
             btnCat[i] = document.getElementById("btnCat" + i)
             btnCat[i].addEventListener("click", event => {
-                let figures = Array.from(document.querySelectorAll(".gallery figure"))
+                const figures = Array.from(document.querySelectorAll(".gallery figure"))
                 figures.forEach(fig => fig.style.display = "none") //masque tous les travaux
-                let filterFigures = figures.filter(fig => fig.classList.contains("cat" + i))
-                filterFigures.forEach(fig => fig.style.display = "block")   //affiche les travaux filtrés
+                const filterFigures = figures.filter(fig => fig.classList.contains("cat" + i))
+                filterFigures.forEach(fig => fig.style.display = "block") //affiche les travaux filtrés
 
-                btnCat.forEach(btn => btn.classList.remove("btnActive"))
-                event.currentTarget.classList.add("btnActive")
+                event.currentTarget.classList.add("btnActive")  //colore le bouton du filtre actif en vert
+                btnCat.forEach(btn => btn.classList.remove("btnActive")) // les autres boutons filtres reprennent la couleur normale
             })
         }
     } catch (error) {
@@ -94,7 +94,7 @@ function tokenLocalStorage() {
     let logout
 
     try {
-        if (tokenStorage !== null) {
+        if (tokenStorage) {
             console.log("storageLocal ok : " + tokenStorage)
             let header = document.querySelector("header")
             header.style.marginTop = "100px"
@@ -135,14 +135,14 @@ function tokenLocalStorage() {
 
 function createModale(gallery) {
     try {
-        let divGalleryModale = document.querySelector(".galleryModale")
+        const divGalleryModale = document.querySelector(".galleryModale")
         divGalleryModale.innerHTML = ""
 
         let modaleGallery = ""
         gallery.forEach(item => {
             modaleGallery +=
                 `<figure id="mod-${item.id}" class="cat${item.categoryId} cat0"><div class="trashIcon"><i id="${item.id}" class="fa-solid fa-sm fa-trash-can"></i></div>
-                    <img src="${item.imageUrl}">
+                <img src="${item.imageUrl}">
                 </figure>`
         })
         divGalleryModale.innerHTML = modaleGallery
@@ -154,19 +154,20 @@ function createModale(gallery) {
 
 function gererModale() {
     try {//afficher la modale en cliquant sur modifier
-        let modale = document.getElementById("modaleContainer")
-        let btnModifier = document.querySelector(".btnModifier")
+        const modale = document.getElementById("modaleContainer")
+        const btnModifier = document.querySelector(".btnModifier")
         btnModifier.addEventListener("click", () => {
             modale.style.display = "flex"
-            //toujours afficher la page suppression de la modale en premier
-            let modaleDeleteWorks = document.querySelector(".modaleDeleteWorks")
+            //toujours afficher la page "suppression" de la modale en premier
+            const modaleDeleteWorks = document.querySelector(".modaleDeleteWorks")
             modaleDeleteWorks.classList.remove("hidden")
-            let modaleAddWorks = document.querySelector(".modaleAddWorks")
+            const modaleAddWorks = document.querySelector(".modaleAddWorks")
             modaleAddWorks.classList.add("hidden")
         })
 
         function fermerModale() {
             modale.style.display = "none"
+            resetForm()
         }
         //fermer en cliquant sur la croix
         document.querySelectorAll(".fa-xmark")
@@ -175,11 +176,12 @@ function gererModale() {
         modale.addEventListener("click", event => {
             if (event.target.id === "modaleContainer") {
                 fermerModale()
+                resetForm()
             }
         })
-        let btnAddPhoto = document.querySelector(".btnAddPhoto")
-        let modaleDeleteWorks = document.querySelector(".modaleDeleteWorks")
-        let modaleAddWorks = document.querySelector(".modaleAddWorks")
+        const btnAddPhoto = document.querySelector(".btnAddPhoto")
+        const modaleDeleteWorks = document.querySelector(".modaleDeleteWorks")
+        const modaleAddWorks = document.querySelector(".modaleAddWorks")
         btnAddPhoto.addEventListener("click", () => {
             modaleDeleteWorks.classList.add("hidden")
             modaleAddWorks.classList.remove("hidden")
@@ -195,10 +197,10 @@ function setDeleteBtns(gallery) {
         const btnSuppr = document.querySelectorAll(".trashIcon i")
         btnSuppr.forEach(btn => {
             btn.addEventListener("click", async event => {
-                let button = event.currentTarget
-                let tokenStorage = window.localStorage.getItem("token")
+                const button = event.currentTarget
+                const tokenStorage = window.localStorage.getItem("token")
 
-                let url = `http://localhost:5678/api/works/${button.id}`
+                const url = `http://localhost:5678/api/works/${button.id}`
                 const response = await fetch(url, {
                     method: "DELETE",
                     headers: {
@@ -215,54 +217,114 @@ function setDeleteBtns(gallery) {
                     createModale(gallery)
 
                 } else {
-                    throw new Error("l'API ne reconnaît pas ce fichier.")
+                    alert("Votre session a expiré. Vous allez être redirigé.")
+                    window.localStorage.removeItem("token")
+                    location.reload()
                 }
             })
         })
     } catch (error) {
         console.log("Impossible d'effacer :", error.message)
     }
-
 }
 
+const submitButton = document.querySelector(".submitButton")
+function resetForm(){
+    const form = document.getElementById("formulaire")
+    const erreurChamp=document.getElementById("erreurChamp")
+    form.reset()
+    image.src = ""
+    photoContainer.style.display = "flex"
+    if(erreurChamp){
+        erreurChamp.innerHTML = ""}
+    submitButton.removeAttribute("id")
+}
 
-let image = document.getElementById("image")
-let photoContainer = document.getElementById("photoContainer")
-let previewPicture = function (input) {
+const image = document.getElementById("image")
+const photoContainer = document.getElementById("photoContainer")
+const photo = document.getElementById("photo")
+
+function previewPicture(input) {
+   try{ 
     const [picture] = input.files
-    if (picture) {
-        let reader = new FileReader()
-        reader.onload = function (event) {
-            image.src = event.target.result
-            image.style.display = "block"
-            photoContainer.style.display = "none"
+        if (picture) {
+            const reader = new FileReader()
+            reader.onload = function (event) {
+                image.src = event.target.result
+                image.style.display = "block"
+                photoContainer.style.display = "none"
+            }
+            reader.readAsDataURL(picture)
         }
-        reader.readAsDataURL(picture)
+   }catch(error){
+        console.log("Erreur:", error.message)
     }
 }
-// Attacher le onchange à l'input
-document.getElementById("photo").addEventListener("change", function () {
+photo.addEventListener("change", function(){ 
     previewPicture(this)
 })
 
 //reset form au clic sur la preview de la photo
-document.getElementById('image').addEventListener('click', function () {
-    const form = document.getElementById('formulaire')
-    form.reset()
-    this.src = ''
-    document.getElementById("photoContainer").style.display = "flex"
-})
+document.getElementById("image").addEventListener("click", () => resetForm())
 
+//menu select dynamique
+const categoryID = document.getElementById("category")
 function menuSelect(categories){
     let categoriesMenu=`<option value="0"></option>`
     console.log('categories:', categories)
     for(cat of categories){  
         categoriesMenu+=`<option value="${cat.id}">${cat.name}</option>`
     }
-    
-let categ=document.getElementById("category")
-categ.innerHTML=categoriesMenu
+    categoryID.innerHTML=categoriesMenu
 }
+
+const inputFile = document.getElementById("photo")
+const inputTitle = document.getElementById("titre")
+
+function validateBtn(){
+    const erreurChamp=document.getElementById("erreurChamp")
+    const formFilled=inputFile.files.length > 0 && inputTitle.value.trim() !== "" && categoryID.value !== "0"
+    if (formFilled) {
+        if (erreurChamp) {erreurChamp.innerHTML = ""}
+        submitButton.setAttribute("id","btnValiderActive")
+    } else {
+        submitButton.removeAttribute("id")
+    }  
+}  
+
+inputFile.addEventListener("change", validateBtn)
+inputTitle.addEventListener("input", validateBtn)
+categoryID.addEventListener("change", validateBtn)
+
+function validateForm(event) {
+    try{
+        const erreurChamp=document.getElementById("erreurChamp")
+        const messageErreur="Veuillez remplir tous les champs."
+        const formMessage = document.getElementById("formulaire")
+        const formFilled=inputFile.files.length > 0 && inputTitle.value.trim() !== "" && categoryID.value !== "0"
+        
+        if (!formFilled) {
+            event.preventDefault()
+            if (!erreurChamp) {
+                // création du message d'erreur s'il n'existe pas
+                const createBalise = `<p id="erreurChamp">${messageErreur}</p>`
+                const messagePlace = formMessage.children.item(5)
+                messagePlace.insertAdjacentHTML("afterend", createBalise)
+            } else {
+                // mise à jour s'il existe déjà
+                erreurChamp.innerHTML = messageErreur
+            }
+        } else {
+            // effacement du message si form ok
+            if (erreurChamp) {
+                erreurChamp.innerHTML = ""}
+        }
+    }catch(error){
+        console.log("error:", error.message)
+
+    }
+}    
+submitButton.addEventListener("click", validateForm)
 
 async function addNewPhoto(event) {
     event.preventDefault()
@@ -270,21 +332,21 @@ async function addNewPhoto(event) {
     const form = event.target
     const formData = new FormData()
 
-    let titre = document.getElementById("titre").value
+    const titre = document.getElementById("titre").value
     console.log('titre:', titre)
     formData.append("title", titre)
 
-    let imageUrl = document.getElementById("photo").files[0]
+    const imageUrl = document.getElementById("photo").files[0]
     console.log('imageUrl:', imageUrl)
     formData.append("image", imageUrl)
     
-    let categoryId = document.getElementById("category").value
+    const categoryId = document.getElementById("category").value
     console.log('categoryId:', categoryId)
     formData.append("category", categoryId)
 
     
     try {
-        let tokenStorage = window.localStorage.getItem("token")
+        const tokenStorage = window.localStorage.getItem("token")
         const response = await fetch("http://localhost:5678/api/works", {
             method: "POST",
             headers: {
@@ -295,7 +357,7 @@ async function addNewPhoto(event) {
         })
 
         if (!response.ok) {
-            throw new Error("Erreur lors de l'envoi de l'image")
+            throw new Error("Erreur lors de l'envoi de l'image. Vérifiez que tous les champs sont remplis.")
         }
         
         const newPhoto = await response.json()
@@ -303,18 +365,19 @@ async function addNewPhoto(event) {
         createGallery(gallery)
         createModale(gallery)
 
-        // Réinitialiser form
+        // Réinitialise form
         form.reset()
 
-        // Fermer la modale après ajout photo
-        document.getElementById("photoContainer").style.display = "flex"
-        document.getElementById("image").style.display = "none"
+        // Ferme la modale après ajout photo
+        photoContainer.style.display = "flex"
+        image.style.display = "none"
         document.getElementById("modaleContainer").style.display = "none"
 
     } catch (error) {
-        console.error("Erreur:", error)
+        console.error("Erreur:", error.message)
     }
 }
+document.querySelector(".addPhotoForm").addEventListener("submit", addNewPhoto)
 
 let gallery = []
 
@@ -323,11 +386,10 @@ async function appels() {
     createGallery(gallery)
     let categories = await apiRequestCategories()
     createCategories(categories)
-    filterCategories()
+    filterCategories(categories)
     tokenLocalStorage()
     createModale(gallery)
     gererModale()
     menuSelect(categories)
-    document.querySelector(".addPhotoModale").addEventListener("submit", addNewPhoto)
 }
 appels()

@@ -6,8 +6,8 @@ const url = "http://localhost:5678/api/users/login"
 
 function balisesErreurs(balise,message,messageErreur){ 
     try{   if (!balise){
-                let article = document.querySelector("article")
-                let messagePlace = article.children.item(0)                 
+                const article = document.querySelector("article")
+                const messagePlace = article.children.item(0)                 
                 messagePlace.insertAdjacentHTML("afterend",message)
             } else {//si elle existe déjà:
                 balise.innerHTML = messageErreur
@@ -50,12 +50,12 @@ try {
             }
 
             try{
-                let baliseErreur1=document.getElementById("baliseErreur1")
-                let createMessage1=`<p id="baliseErreur1">${messageErreur}</p>`    
+                const baliseErreur1=document.getElementById("baliseErreur1")
+                const createMessage1=`<p id="baliseErreur1">${messageErreur}</p>`    
                 balisesErreurs(baliseErreur1,createMessage1,messageErreur)
 
-                let baliseErreur2=document.getElementById("baliseErreur2")
-                let createMessage2= `<p id="baliseErreur2">Utilisateur non connecté</p>`
+                const baliseErreur2=document.getElementById("baliseErreur2")
+                const createMessage2= `<p id="baliseErreur2">Utilisateur non connecté</p>`
                 balisesErreurs(baliseErreur2,createMessage2,"Utilisateur non connecté")
             }catch(error){
                 console.log("Erreur lors de la création de baliseErreur 1 ou 2 : ",error.message)

@@ -106,8 +106,8 @@ li:hover, a:hover{
 	color: #B1663C;
 }
 
-.logout{
-	cursor:pointer;
+.pointer{
+	cursor:pointer;	
 }
 
 #introduction {
@@ -146,7 +146,7 @@ li:hover, a:hover{
 	justify-content: space-between;
 	margin-bottom: 30px;
 }
-.filtersContainer div, .btnAddPhoto, #modaleContainer [type="submit"]{
+.filtersContainer div, .btnAddPhoto, .submitButton{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: #1D6154;
@@ -156,7 +156,7 @@ li:hover, a:hover{
 	cursor:pointer;
 }
 .btnAddPhoto, #modaleContainer [type="submit"]{
-	width:172px;
+	width:250px;
 	height:39px;
 	border:none;
 }
@@ -188,7 +188,6 @@ li:hover, a:hover{
     top: -47px;
     left: 700px;
 	width: 80px;
-	cursor: pointer;
 }
 
 .hidden{
@@ -225,15 +224,15 @@ li:hover, a:hover{
 	height: 96%;
 }
 
-.addPhotoModale{
+.addPhotoForm{
 	width: 68%;
 	margin: 60px auto;
 }
-#modaleContainer .addPhotoSpace [type="file"]{
+#modaleContainer .photoInputWrapper [type="file"]{
 	display:none;
 }
 
-#modaleContainer .photoBtn{
+#photoContainer .photoBtn{
 	margin: 0;
 }
 /**********************************************************/
@@ -266,6 +265,7 @@ margin: auto;
 #login input[type="submit"]{
 	height:40px;
 	margin-top:30px;
+	cursor:pointer;
 }
 #login a{
 	color:black;
@@ -367,8 +367,8 @@ input[type="submit"] {
 	position:absolute;
 	top:30px;
 	right:30px;
-	cursor: pointer;
 }
+
 .galleryLowPart{
 	position: absolute;
     bottom: 0px;
@@ -399,7 +399,7 @@ input[type="submit"] {
 	color:#444444;
 }
 
-.addPhotoSpace{
+.photoInputWrapper{
 	display: flex;
 	justify-content:center;
 	align-items:center;
@@ -408,12 +408,12 @@ input[type="submit"] {
 	height:170px;
  }
 
-.addPhotoSpace div {
+.photoInputWrapper div {
 font-size: 10px;
 text-align: center;
 }
 
-.addPhotoSpace .photoBtn{
+.photoInputWrapper .photoBtn{
 	font-size: 14px;
 	padding:10px 35px;
 	background-color: #CBD6DC;
@@ -428,7 +428,7 @@ text-align: center;
 	color:#B9C5CC;
 	width:200px;
 }
-.addPhotoSpace .fa-2xl{
+.photoInputWrapper .fa-2xl{
 	font-size: 7.5em;
 	line-height: 1em;
 }
@@ -443,6 +443,19 @@ text-align: center;
     flex-direction: column;
 	align-items: center;
 }
+
+#erreurChamp{
+	position: absolute;
+	top: 520px;
+    right: 125px;
+    left: 125px;
+    text-align: center;
+}
+
+.modaleAddWorks #btnValiderActive{
+	background-color: #1D6154;
+	color:white;
+} 
 /************************************************/
 
 footer{

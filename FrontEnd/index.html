@@ -23,7 +23,7 @@
                     <li>projets</li>
                     <li>contact</li>
                     <li class="login"><a href="login.html">login</a></li>
-                    <li class="logout hidden">logout</li>
+                    <li class="logout hidden pointer">logout</li>
                     <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
                 </ul>
             </nav>
@@ -41,7 +41,7 @@
                 </article>
             </section>
             <section id="portfolio">
-                <h2>Mes Projets</h2> <div class="btnModifier hidden"><i class="fa-regular fa-pen-to-square" style="color:black"></i> modifier</div>
+                <h2>Mes Projets</h2> <div class="btnModifier hidden pointer"><i class="fa-regular fa-pen-to-square" style="color:black"></i> modifier</div>
                 <div class="gallery">
                 </div>
             </section>
@@ -61,7 +61,7 @@
             <aside id="modaleContainer">
                 <div class="modaleDeleteWorks">
                     <h1>Galerie photo</h1>
-                    <div><i class="fa-solid fa-xmark fa-xl"></i></div>
+                    <div><i class="fa-solid fa-xmark fa-xl pointer"></i></div>
                     <div class="galleryModale"></div>
                     <div class="galleryLowPart">
                     <div class="greyLine"></div>
@@ -70,13 +70,13 @@
                 </div>
                 <div class="modaleAddWorks hidden">
                     <h1>Ajout photo</h1>
-                    <form id="formulaire" class="addPhotoModale" method="post" url="/upload-picture" enctype="multipart/form-data">
-                        <div><i class="fa-solid fa-xmark fa-xl"></i></div>
-                        <div class="addPhotoSpace">
-                            <img src="#" alt="" id="image">
+                    <form id="formulaire" class="addPhotoForm" method="post" url="/upload-picture" enctype="multipart/form-data">
+                        <div><i class="fa-solid fa-xmark fa-xl pointer"></i></div>
+                        <div class="photoInputWrapper">
+                            <img src="#" alt="" id="image" title="Cliquez pour réinitialiser le formulaire.">
                             <div id="photoContainer">
                                 <i class="fa-regular fa-image fa-2xl"></i>
-                                <label for="photo" class="photoBtn">+ Ajouter photo</label>
+                                <label for="photo" class="photoBtn pointer">+ Ajouter photo</label>
                                 <input type="file" name="picture" accept=".jpg,.png" id="photo" onchange="previewPicture(this)" required>
                                 <div>jpg, png : 4mo max</div>
                             </div>
@@ -88,7 +88,7 @@
                         </select>    
                 </form>
                 <div class="greyLineAddPhoto"></div>
-                <input type="submit" form="formulaire" value="Valider" class="addPhoto"></input>
+                <input type="submit" form="formulaire" value="Valider" class="submitButton"></input>
                 </div>
             </aside>
         </main>
