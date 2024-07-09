@@ -379,12 +379,12 @@ async function addNewPhoto(event) {
         // Réinitialise form
         form.reset()
 
-        // Ferme la modale après ajout photo
+        // Reviens à la delete modale après ajout photo
         afficherDeleteModale()
         photoContainer.style.display = "flex"
         image.style.display = "none"
-        // document.getElementById("modaleContainer").style.display = "none"
-
+        // document.getElementById("modaleContainer").style.display = "none" (pour fermer modale près ajout photo)
+        
     } catch (error) {
         console.error("Erreur:", error.message)
     }
