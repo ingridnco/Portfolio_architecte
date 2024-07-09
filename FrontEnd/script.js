@@ -80,8 +80,8 @@ function filterCategories(categories) {
                 const filterFigures = figures.filter(fig => fig.classList.contains("cat" + i))
                 filterFigures.forEach(fig => fig.style.display = "block") //affiche les travaux filtrés
 
+                btnCat.forEach(btn => btn.classList.remove("btnActive")) // les boutons non filtrés reprennent la couleur normale
                 event.currentTarget.classList.add("btnActive")  //colore le bouton du filtre actif en vert
-                btnCat.forEach(btn => btn.classList.remove("btnActive")) // les autres boutons filtres reprennent la couleur normale
             })
         }
     } catch (error) {
@@ -110,10 +110,10 @@ function tokenLocalStorage() {
             modifProjet.classList.remove("hidden")
 
             //masquer les éléments :
-            const filtersBar = document.querySelector(".filtersContainer")//boutons filtres
-            filtersBar.classList.add("hidden")
             const login = document.querySelector(".login")//bouton login
             login.classList.add("hidden")
+            const filtersBar = document.querySelector(".filtersContainer")//boutons filtres
+            filtersBar.classList.add("hidden")
 
         } else {
             throw new Error("token non sauvegardé")
@@ -132,7 +132,6 @@ function tokenLocalStorage() {
     } catch (error) {
         console.log("Déconnecté")
     }
-
 }
 
 /*********************************Modale*********************************/
@@ -223,7 +222,6 @@ function setDeleteBtns(gallery) {
                 } else {
                     alert("Votre session a expiré. Vous allez être redirigé.")
                     window.localStorage.removeItem("token")
-                    debugger
                     location.reload()
                 }
             })
@@ -273,7 +271,7 @@ function resetForm(){
     if(erreurChamp){
         erreurChamp.innerHTML = ""}
     submitButton.removeAttribute("id")
-}//reset form en cliquanr sur la preview :
+}//reset form en cliquant sur la preview :
 document.getElementById("image").addEventListener("click", () => resetForm())
 
 //menu select dynamique
