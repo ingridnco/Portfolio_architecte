@@ -110,13 +110,17 @@ li:hover, a:hover{
 	cursor:pointer;	
 }
 
+
+/**********************accueil*******************************************/
 #introduction {
 	display: flex;
 	align-items: center;
 }
+
 #introduction figure {
 	flex: 1
 }
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -126,6 +130,7 @@ li:hover, a:hover{
 #introduction article {
 	flex: 1
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -133,12 +138,28 @@ li:hover, a:hover{
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
 	margin-top: 4em;
 }
-/*****************************************************************/
+
+.gallery {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 20px;
+	grid-row-gap: 20px;
+}
+
+.gallery img, .galleryModale img {
+	width: 100%;
+	object-fit: cover;
+	height: 96%;
+}
+
+/**********************categories*******************************************/
 .filtersContainer{
 	display:flex;
 	width:560px;
@@ -146,6 +167,7 @@ li:hover, a:hover{
 	justify-content: space-between;
 	margin-bottom: 30px;
 }
+
 .filtersContainer div, .btnAddPhoto, .submitButton{
 	font-family: 'Syne';
 	font-weight: 700;
@@ -155,11 +177,7 @@ li:hover, a:hover{
 	padding:10px 20px;
 	cursor:pointer;
 }
-.btnAddPhoto, #modaleContainer [type="submit"]{
-	width:250px;
-	height:39px;
-	border:none;
-}
+
 .filtersContainer .btnActive{
 	background-color: #1D6154;
 	color:white;
@@ -168,6 +186,11 @@ li:hover, a:hover{
 .filtersContainer div:hover{
 	background-color: #1D6154;
 	color:white;
+}
+
+/**********************admin*************************************/
+.hidden{
+	display:none;
 }
 
 .edit{
@@ -180,7 +203,6 @@ li:hover, a:hover{
 	height:50px;
 	text-align:center;
 	line-height:40px;
-	
 }
 
 .btnModifier{
@@ -190,68 +212,34 @@ li:hover, a:hover{
 	width: 80px;
 }
 
-.hidden{
-	display:none;
-}
 .fa-pen-to-square{
 	color: black
 }
 
-/***************************************************************/
-
-.gallery {
-	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
-}
-
-.galleryModale{
-	width: 68%;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-column-gap: 10px;
-    grid-row-gap: 30px;
-	margin: 50px auto;
-    overflow: auto;
-    
-}
-
-.gallery img, .galleryModale img {
-	width: 100%;
-	object-fit: cover;
-	height: 96%;
-}
-
-.addPhotoForm{
-	width: 68%;
-	margin: 60px auto;
-}
-#modaleContainer .photoInputWrapper [type="file"]{
-	display:none;
-}
-
-#photoContainer .photoBtn{
-	margin: 0;
-}
-/**********************************************************/
+/***********************mise en forme formulaires & modale***********************************/
 #contact, #login, #modaleContainer {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
+
 #contact > *, #login > *,#modaleContainer > *{
 	text-align: center;
 
 }
+
 #contact h2, #login h2, #modaleContainer h2{
 	margin-bottom: 20px;
 }
-#contact form , #login form, #modaleContainer form{
+
+#contact form, #login form, #modaleContainer form{
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
+}
+
+#login form{
+	margin-top:0;
 }
 
 #contact input , #login input, #modaleContainer input, #modaleContainer select{
@@ -261,12 +249,12 @@ margin: auto;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-
 #login input[type="submit"]{
 	height:40px;
 	margin-top:30px;
 	cursor:pointer;
 }
+
 #login a{
 	color:black;
 }
@@ -275,10 +263,15 @@ margin: auto;
 	color:#B1663C;
 }
 
+#baliseErreur2{
+	position: absolute;
+    top: 208px;
+    left: calc(50% - 85px);
+}
+
 #contact label , #login label, #modaleContainer label{
 	margin: 2em 0 1em 0;
 }
-/********************************************************/
 
 #contact textarea {
 	border: none;
@@ -295,7 +288,17 @@ input[type="submit"] {
 	text-align: center;
 	border-radius: 60px ;
 }
-/************************************************/
+
+/*****************************modale******************************/
+.galleryModale{
+	width: 68%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 30px;
+	margin: 50px auto;
+    overflow: auto;
+}
 
 #modaleContainer{
 	position: fixed;
@@ -309,6 +312,7 @@ input[type="submit"] {
     background-color: rgba(0, 0, 0, 0.3);
     overflow: auto;
 }
+
 .modaleDeleteWorks, .modaleAddWorks{
 	position:relative;
     background-color: white;
@@ -327,12 +331,7 @@ input[type="submit"] {
 	margin-top:40px;
 }
 
-.btnAddPhoto{
-	background-color: #1D6154;
-	color:white;
-	margin-bottom: 40px;
-}
-
+/******************delete part********************/
 .galleryModale figure{
 	position:relative;
 }
@@ -369,18 +368,46 @@ input[type="submit"] {
 	right:30px;
 }
 
+/******************************add photo part**********************************/
+.addPhotoForm{
+	width: 68%;
+	margin: 60px auto;
+}
+
+.btnAddPhoto, #modaleContainer [type="submit"]{
+	width:250px;
+	height:39px;
+	border:none;
+}
+
+#modaleContainer .photoInputWrapper [type="file"]{
+	display:none;
+}
+
+#photoContainer .photoBtn{
+	margin: 0;
+}
+
+.btnAddPhoto{
+	background-color: #1D6154;
+	color:white;
+	margin-bottom: 40px;
+}
+
 .galleryLowPart{
 	position: absolute;
     bottom: 0px;
     left: 0px;
     right: 0px;
 }
+
 .greyLine, .greyLineAddPhoto{
 	margin:40px auto;
 	width:68%;
 	height:1px;
 	background-color: #B3B3B3;
 }
+
 .greyLineAddPhoto{
 	margin:40px auto;
 	height:1px;
@@ -409,8 +436,8 @@ input[type="submit"] {
  }
 
 .photoInputWrapper div {
-font-size: 10px;
-text-align: center;
+	font-size: 10px;
+	text-align: center;
 }
 
 .photoInputWrapper .photoBtn{
@@ -421,13 +448,13 @@ text-align: center;
 	width:fit-content;
 	color:#306685;
 	font-weight:600;
-
 }
 
 .fa-image{
 	color:#B9C5CC;
 	width:200px;
 }
+
 .photoInputWrapper .fa-2xl{
 	font-size: 7.5em;
 	line-height: 1em;
@@ -456,12 +483,12 @@ text-align: center;
 	background-color: #1D6154;
 	color:white;
 } 
-/************************************************/
 
+/*****************************footer*****************************/
 footer{
-margin-top:100px;
-background-color: white;
-padding: 15px 0;
+	margin-top:100px;
+	background-color: white;
+	padding: 15px 0;
 }
 
 footer nav ul {
@@ -469,6 +496,7 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 1em
 }
+
 footer nav li{
 	font-size: 1em;
 }
