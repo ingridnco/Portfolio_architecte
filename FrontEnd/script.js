@@ -154,6 +154,13 @@ function createModale(gallery) {
     }
 }
 
+function afficherDeleteModale(){
+    const modaleDeleteWorks = document.querySelector(".modaleDeleteWorks")
+    modaleDeleteWorks.classList.remove("hidden")
+    const modaleAddWorks = document.querySelector(".modaleAddWorks")
+    modaleAddWorks.classList.add("hidden")
+}
+
 function gererModale() {
     try {//afficher la modale en cliquant sur modifier
         const modale = document.getElementById("modaleContainer")
@@ -161,10 +168,7 @@ function gererModale() {
         btnModifier.addEventListener("click", () => {
             modale.style.display = "flex"
             //toujours afficher la page "suppression" de la modale en premier
-            const modaleDeleteWorks = document.querySelector(".modaleDeleteWorks")
-            modaleDeleteWorks.classList.remove("hidden")
-            const modaleAddWorks = document.querySelector(".modaleAddWorks")
-            modaleAddWorks.classList.add("hidden")
+            afficherDeleteModale()
         })
 
         function fermerModale() {
@@ -376,9 +380,10 @@ async function addNewPhoto(event) {
         form.reset()
 
         // Ferme la modale après ajout photo
+        afficherDeleteModale()
         photoContainer.style.display = "flex"
         image.style.display = "none"
-        document.getElementById("modaleContainer").style.display = "none"
+        // document.getElementById("modaleContainer").style.display = "none"
 
     } catch (error) {
         console.error("Erreur:", error.message)
