@@ -182,7 +182,6 @@ function gererModale() {
         modale.addEventListener("click", event => {
             if (event.target.id === "modaleContainer") {
                 fermerModale()
-                resetForm()
             }
         })
         const btnAddPhoto = document.querySelector(".btnAddPhoto")
