@@ -300,6 +300,7 @@ input[type="submit"] {
     margin: 0px auto;
     overflow: auto;
     padding: 35px 0;
+	grid-auto-rows: 110px;
 }
 
 #modaleContainer{
