@@ -70,7 +70,7 @@
                 </div>
                 <div class="modaleAddWorks hidden">
                     <h1>Ajout photo</h1>
-                    <form id="formulaire" class="addPhotoForm" method="post" url="/upload-picture" enctype="multipart/form-data">
+                    <form id="formulaire" class="addPhotoForm" method="post" action="/upload-picture" enctype="multipart/form-data">
                         <div><i class="fa-solid fa-xmark fa-xl pointer"></i></div>
                         <div class="photoInputWrapper">
                             <img src="#" alt="" id="image" title="Cliquez pour réinitialiser le formulaire.">
@@ -84,9 +84,9 @@
                         <label for="titre">Titre</label>
                         <input type="text" name="titre" id="titre" required>
                         <label for="category">Catégorie</label>
-                        <select type="text" name="category" id="category" required>
+                        <select name="category" id="category">
                         </select>    
-                </form>
+                    </form>
                 <div class="greyLineAddPhoto"></div>
                 <input type="submit" form="formulaire" value="Valider" class="submitButton"></input>
                 </div>
